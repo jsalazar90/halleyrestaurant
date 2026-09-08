@@ -26,17 +26,54 @@ var import_express = __toESM(require("express"), 1);
 var import_vite3 = require("vite");
 var import_http = require("http");
 var import_path2 = __toESM(require("path"), 1);
+var import_fs2 = __toESM(require("fs"), 1);
 
 // vite.config.ts
 var import_vite = __toESM(require("@tailwindcss/vite"), 1);
 var import_plugin_react = __toESM(require("@vitejs/plugin-react"), 1);
 var import_path = __toESM(require("path"), 1);
+var import_fs = __toESM(require("fs"), 1);
 var import_vite2 = require("vite");
 var import_vite_plugin_pwa = require("vite-plugin-pwa");
+function caseInsensitiveResolverPlugin() {
+  return {
+    name: "case-insensitive-resolver",
+    enforce: "pre",
+    resolveId(source, importer) {
+      if (!importer || !source.startsWith(".")) return null;
+      const importerDir = import_path.default.dirname(importer);
+      const targetPath = import_path.default.resolve(importerDir, source);
+      const extensions = ["", ".tsx", ".ts", ".jsx", ".js", ".json"];
+      for (const ext of extensions) {
+        if (import_fs.default.existsSync(targetPath + ext)) {
+          return null;
+        }
+      }
+      const targetDir = import_path.default.dirname(targetPath);
+      const targetBase = import_path.default.basename(targetPath).toLowerCase();
+      if (import_fs.default.existsSync(targetDir)) {
+        try {
+          const files = import_fs.default.readdirSync(targetDir);
+          for (const file of files) {
+            const ext = import_path.default.extname(file);
+            const baseName = import_path.default.basename(file, ext).toLowerCase();
+            if (baseName === targetBase && [".tsx", ".ts", ".jsx", ".js", ".json"].includes(ext)) {
+              return import_path.default.join(targetDir, file);
+            }
+          }
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    }
+  };
+}
 var vite_config_default = (0, import_vite2.defineConfig)(({ mode }) => {
   const env = (0, import_vite2.loadEnv)(mode, ".", "");
   return {
     plugins: [
+      caseInsensitiveResolverPlugin(),
       (0, import_plugin_react.default)(),
       (0, import_vite.default)(),
       (0, import_vite_plugin_pwa.VitePWA)({
@@ -74,7 +111,7 @@ var vite_config_default = (0, import_vite2.defineConfig)(({ mode }) => {
     },
     resolve: {
       alias: {
-        "@": import_path.default.resolve(__dirname, ".")
+        "@": import_path.default.resolve(process.cwd(), ".")
       }
     },
     server: {
@@ -103,9 +140,21 @@ async function startServer() {
         ...userConfig.server || {},
         middlewareMode: true
       },
-      appType: "spa"
+      appType: "custom"
     });
     app.use(vite.middlewares);
+    app.get("*", async (req, res, next) => {
+      if (req.originalUrl.startsWith("/api")) return next();
+      try {
+        const url = req.originalUrl;
+        let template = import_fs2.default.readFileSync(import_path2.default.resolve(process.cwd(), "index.html"), "utf-8");
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ "Content-Type": "text/html" }).end(template);
+      } catch (e) {
+        vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
   } else {
     const distPath = import_path2.default.join(process.cwd(), "dist");
     app.use(import_express.default.static(distPath));
@@ -122,3 +171,4 @@ async function startServer() {
   });
 }
 startServer();
+//# sourceMappingURL=server.cjs.map

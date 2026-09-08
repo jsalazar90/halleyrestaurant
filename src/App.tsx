@@ -676,12 +676,16 @@ function AppContent() {
               <Operations
                 servicios={servicios}
                 cuentasContables={cuentasContables}
+                bancos={bancos}
+                configContable={configContable}
                 onSave={handleSave}
                 showToast={showToast}
               />
             }
           />
           <Route path="/operaciones" element={<Navigate to="/operations" replace />} />
+          <Route path="/inventario" element={<Navigate to="/operations" replace />} />
+          <Route path="/menu" element={<Navigate to="/operations" replace />} />
           <Route
             path="/purchases/new"
             element={

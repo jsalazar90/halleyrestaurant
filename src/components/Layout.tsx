@@ -33,6 +33,7 @@ import {
   Terminal,
   ShoppingCart,
   UtensilsCrossed,
+  Boxes,
 } from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
 import { dbSaveEmpresa, dbSaveConfiguracionContable } from "../services/db";
@@ -53,9 +54,9 @@ const NAVIGATION = [
     id: "cajaMostrador",
   },
   {
-    name: "Operaciones",
+    name: "Menú & Inventario",
     path: "/operations",
-    icon: Package,
+    icon: Boxes,
     id: "operaciones",
   },
   {

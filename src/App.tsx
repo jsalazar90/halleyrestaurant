@@ -19,6 +19,7 @@ import PayablesMenu from "./pages/PayablesMenu";
 import Settings from "./pages/Settings";
 import Accounting from "./pages/Accounting";
 import Billing from "./pages/Billing";
+import PosRestaurant from "./pages/PosRestaurant";
 import Operations from "./pages/Operations";
 
 import PurchaseForm from "./pages/PurchaseForm";
@@ -650,6 +651,25 @@ function AppContent() {
             }
           />
           <Route path="/facturacion" element={<Navigate to="/billing" replace />} />
+          <Route
+            path="/caja-mostrador"
+            element={
+              <PosRestaurant
+                servicios={servicios}
+                contactos={contactos}
+                bancos={bancos}
+                cuentasContables={cuentasContables}
+                configContable={configContable}
+                empresa={empresa}
+                onSave={handleSave}
+                reloadCxc={reloadCxc}
+                reloadComprobantes={reloadComprobantes}
+                showToast={showToast}
+              />
+            }
+          />
+          <Route path="/pos" element={<Navigate to="/caja-mostrador" replace />} />
+          <Route path="/pos-restaurante" element={<Navigate to="/caja-mostrador" replace />} />
           <Route
             path="/operations"
             element={

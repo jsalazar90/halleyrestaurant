@@ -1,9 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Store, Plus, Eye, Edit, DollarSign, Calendar, CalendarDays, 
   User, FileText, Search, Tag, X, RefreshCw, Building2, Users, 
   ArrowUpRight, Calculator, Check, Briefcase, ShoppingCart, 
-  ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, Download, Printer, Trash2
+  ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, Download, Printer, Trash2,
+  UtensilsCrossed
 } from 'lucide-react';
 import { useCompany } from '../context/CompanyContext';
 import { 
@@ -581,14 +583,24 @@ export default function Billing({
               <span className="hidden sm:inline">Exportar Mes</span>
             </button>
 
-            {/* Botón Caja Registradora (POS) */}
+            {/* Botón Caja Registradora (POS) Modal */}
             <button
               onClick={() => setIsPosModalOpen(true)}
               className="px-3.5 py-2 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
             >
               <ShoppingCart size={14} />
-              <span>Caja Mostrador (POS)</span>
+              <span>Caja Mostrador (Ventana)</span>
             </button>
+
+            {/* Botón dedicado Móvil / Tablet Pantalla Completa */}
+            <Link
+              to="/caja-mostrador"
+              className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-amber-500/20"
+              title="Abrir Caja Mostrador para Restaurante en pantalla completa optimizada para tablets y teléfonos"
+            >
+              <UtensilsCrossed size={14} />
+              <span>Caja Restaurante (Tablet / Móvil)</span>
+            </Link>
 
             {/* BOTÓN INTACTO: NUEVA FACTURA DE SERVICIO */}
             <button 
@@ -918,8 +930,17 @@ export default function Billing({
             className="px-3.5 py-2 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
           >
             <ShoppingCart size={14} />
-            <span>Caja Mostrador</span>
+            <span>Caja Mostrador (Ventana)</span>
           </button>
+
+          <Link
+            to="/caja-mostrador"
+            className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-amber-500/20"
+            title="Abrir Caja Mostrador para Restaurante en pantalla completa optimizada para tablets y teléfonos"
+          >
+            <UtensilsCrossed size={14} />
+            <span>Caja Restaurante (Tablet / Móvil)</span>
+          </Link>
 
           <button 
             onClick={() => setIsInvoiceModalOpen(true)}

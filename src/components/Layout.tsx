@@ -32,6 +32,7 @@ import {
   Plane,
   Terminal,
   ShoppingCart,
+  UtensilsCrossed,
 } from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
 import { dbSaveEmpresa, dbSaveConfiguracionContable } from "../services/db";
@@ -44,6 +45,12 @@ const NAVIGATION = [
     path: "/billing",
     icon: ShoppingCart,
     id: "facturacion",
+  },
+  {
+    name: "Caja Mostrador",
+    path: "/caja-mostrador",
+    icon: UtensilsCrossed,
+    id: "cajaMostrador",
   },
   {
     name: "Operaciones",
@@ -281,6 +288,11 @@ export default function Layout({
   const activeCompany = availableCompanies.find(
     (c) => c.id === activeCompanyId,
   );
+
+  // Modo Inmersivo de Pantalla Completa para Caja Mostrador (Tablets y Teléfonos)
+  if (location.pathname === '/caja-mostrador' || location.pathname === '/pos') {
+    return <div className="h-screen w-screen overflow-hidden">{children}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-indigo-600 selection:text-white">
